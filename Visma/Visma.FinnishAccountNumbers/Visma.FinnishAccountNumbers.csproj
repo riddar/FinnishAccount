@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Product>Visma.FinnishAccountNumbers</Product>
+    <AssemblyName>FinnishAccountNumbers</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Visma.Type\Visma.Types.csproj" />
+  </ItemGroup>
+
+</Project>
