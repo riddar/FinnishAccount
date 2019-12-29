@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "FinnishAccountNumbers/1.0.0": {
+        "dependencies": {
+          "Visma.Types": "1.0.0"
+        },
+        "runtime": {
+          "FinnishAccountNumbers.dll": {}
+        }
+      },
+      "Visma.Types/1.0.0": {
+        "runtime": {
+          "Visma.Types.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "FinnishAccountNumbers/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Visma.Types/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
