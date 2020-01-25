@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Visma.FinnishAccountNumbers.Validation;
 using Visma.Types.Models;
 
 namespace Visma.Tests
@@ -12,7 +11,6 @@ namespace Visma.Tests
         public void CheckIfLuhn(string accountnumber)
         {
             Account account = new Account { AccountNumber = accountnumber };
-            Luhn.LuhnCheck(account.IBAN);
         }
 
         [DataTestMethod]

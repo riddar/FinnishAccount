@@ -7,58 +7,52 @@ namespace Visma.Types.Models
 {
     public sealed class Account
     {
+
+        public string Bank;
+        public string FirstSixDigits;
+        public string LastDigits;
+        public string IBAN;
+
         private string _accountNumber;
         public string AccountNumber 
         {
             get { return _accountNumber; }
             set {
-                try {
-                    if (LuhnCheck(value) && value.Replace("-", "").All(char.IsDigit))
-                        _accountNumber = value.Replace("-", "");
-                    else
-                        throw new Exception("account number is not correct");
-                    } 
-                catch (Exception e) { throw e; }
-            }
-        }
-
-        public string Bank 
-        {
-            get {
-                if (BankCode(AccountNumber.Substring(0, 1)) != null)
-                    return BankCode(AccountNumber.Substring(0, 1));
-                else if (BankCode(AccountNumber.Substring(0, 2)) != null)
-                    return BankCode(AccountNumber.Substring(0, 2));
-                else
-                    return null;
-            } 
-        }
-        public string FirstSixDigits => AccountNumber.Replace("-", "").Substring(0, 6);
-        public string LastDigits => AccountNumber.Substring(AccountNumber.LastIndexOf('-') + 1);
-        public string IBAN 
-        {
-            get 
-            {
-                string newLastDigits;
-                string Abanks = LastDigits.PadLeft(8, '0');
-                string Bbanks = LastDigits[0] + LastDigits.Substring(LastDigits.Length - 2).PadLeft(7, '0');
-                switch (Bank)
+                if (value.Replace("-", "").All(char.IsDigit) && value.Length > 6 && value.Length < 14)
                 {
-                    case "Nordea": newLastDigits = Abanks; break;
-                    case "Handelsbanken(SHB)": newLastDigits = Abanks; break;
-                    case "Skandinaviska Enskilda Banken(SEB)": newLastDigits = Abanks; break;
-                    case "Danske Bank": newLastDigits = Abanks; break;
-                    case "Tapiola Bank(Tapiola)": newLastDigits = Abanks; break;
-                    case "DnB NOR Bank ASA(DnB NOR)": newLastDigits = Abanks; break;
-                    case "Swedbank": newLastDigits = Abanks; break;
-                    case "S-Bank": newLastDigits = Abanks; break;
-                    case "savings banks(Sp) and local cooperative banks(Pop) and Aktia": newLastDigits = Bbanks; break;
-                    case "cooperative banks(Op), OKO Bank and Okopankki":  newLastDigits = Bbanks; break;
-                    case "Ålandsbanken ÅAB)":  newLastDigits = Abanks; break;
-                    case "Sampo Bank(Sampo)": newLastDigits = Bbanks; break;
-                    default: return null;
-                }
-                return FirstSixDigits + newLastDigits;
+                    _accountNumber = value;
+                    FirstSixDigits = value.Substring(0, 6);
+
+                    if (string.IsNullOrEmpty(value.Substring(0, 1)))
+                        Bank = BankCode(value.Substring(0, 1));
+                    else if (string.IsNullOrEmpty(value.Substring(0, 1)))
+                        Bank = BankCode(value.Substring(0, 2));
+                    else throw new Exception("account number is not correct");
+
+                    var temp = value.Substring(value.LastIndexOf('-') + 1);
+                    string Abanks = temp.PadLeft(8, '0');
+                    string Bbanks = temp[0] + temp.Substring(temp.Length - 2).PadLeft(7, '0');
+                    switch (Bank)
+                    {
+                        case "Nordea": LastDigits = Abanks; break;
+                        case "Handelsbanken(SHB)": LastDigits = Abanks; break;
+                        case "Skandinaviska Enskilda Banken(SEB)": LastDigits = Abanks; break;
+                        case "Danske Bank": LastDigits = Abanks; break;
+                        case "Tapiola Bank(Tapiola)": LastDigits = Abanks; break;
+                        case "DnB NOR Bank ASA(DnB NOR)": LastDigits = Abanks; break;
+                        case "Swedbank": LastDigits = Abanks; break;
+                        case "S-Bank": LastDigits = Abanks; break;
+                        case "savings banks(Sp) and local cooperative banks(Pop) and Aktia": LastDigits = Bbanks; break;
+                        case "cooperative banks(Op), OKO Bank and Okopankki": LastDigits = Bbanks; break;
+                        case "Ålandsbanken ÅAB)": LastDigits = Abanks; break;
+                        case "Sampo Bank(Sampo)": LastDigits = Bbanks; break;
+                    }
+                  
+                    if (LuhnCheck(IBAN))                                
+                        IBAN = FirstSixDigits + LastDigits;   
+                    else throw new Exception("account number is not correct");
+                }        
+                else throw new Exception("account number is not correct");
             }
         }
 

@@ -12,8 +12,13 @@ namespace Visma.FinnishAccountNumbers
             do
             {
                 account = new Account();
-                Console.Write("account number: ");
-                account.AccountNumber = Console.ReadLine();
+                try
+                {    
+                    Console.Write("account number: ");
+                    account.AccountNumber = Console.ReadLine();
+                }
+                catch(Exception e) { Console.WriteLine(e); }
+
 
             } while (string.IsNullOrEmpty(account.AccountNumber));
 
