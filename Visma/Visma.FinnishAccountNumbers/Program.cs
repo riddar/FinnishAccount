@@ -1,6 +1,6 @@
 ﻿using System;
-using Visma.FinnishAccountNumbers.Validation;
 using Visma.Types.Models;
+using System.Linq;
 
 namespace Visma.FinnishAccountNumbers
 {
@@ -8,31 +8,14 @@ namespace Visma.FinnishAccountNumbers
     {
         static void Main(string[] args)
         {
-            bool AccountValid = false;
-            Account account = new Account();
-
+            Account account;
             do
             {
+                account = new Account();
                 Console.Write("account number: ");
-                string accountNumber = Console.ReadLine();
+                account.AccountNumber = Console.ReadLine();
 
-                if(accountNumber.Length != 14 && Luhn.LuhnCheck(accountNumber))
-                    Console.WriteLine($"{accountNumber} is wrong please try again!");
-                else
-                {
-                    if (!Luhn.isDigitsOnly(accountNumber.Replace("-", "")))
-                        Console.WriteLine($"{accountNumber} is wrong please try again!");
-                    else
-                    {
-                        account.AccountNumber = accountNumber;
-                            
-                        if (!Luhn.LuhnCheck(account.IBAN))
-                            Console.WriteLine($"{accountNumber} is wrong please try again!");
-                        else
-                            AccountValid = true;
-                    }
-                }  
-            } while (!AccountValid);
+            } while (string.IsNullOrEmpty(account.AccountNumber));
 
             Console.WriteLine($"Account: {account.AccountNumber}");
             Console.WriteLine($"Bank: {account.Bank}");

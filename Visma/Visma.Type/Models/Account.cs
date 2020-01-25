@@ -1,12 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Visma.Types.Models
 {
     public sealed class Account
     {
-        public string AccountNumber { get; set; }
+        private string _accountNumber;
+        public string AccountNumber 
+        {
+            get { return _accountNumber; }
+            set {
+                try {
+                    if (LuhnCheck(value) && value.Replace("-", "").All(char.IsDigit))
+                        _accountNumber = value.Replace("-", "");
+                    else
+                        throw new Exception("account number is not correct");
+                    } 
+                catch (Exception e) { throw e; }
+            }
+        }
+
         public string Bank 
         {
             get {
@@ -66,6 +81,21 @@ namespace Visma.Types.Models
                 case 8: return "Sampo Bank(Sampo)";
                 default: return null;
             }
+        }
+
+        public bool LuhnCheck(string accountNumber)
+        {
+            return LuhnCheck(accountNumber.Select(c => c - '0').ToArray());
+        }
+
+        private bool LuhnCheck(int[] digits)
+        {
+            return GetCheckValue(digits) == 0;
+        }
+
+        private int GetCheckValue(int[] digits)
+        {
+            return digits.Select((d, i) => i % 2 == digits.Length % 2 ? ((2 * d) % 10) + d / 5 : d).Sum() % 10;
         }
     }
 }
