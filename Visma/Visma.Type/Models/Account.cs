@@ -7,11 +7,10 @@ namespace Visma.Types.Models
 {
     public sealed class Account
     {
-
         public string Bank;
         public string FirstSixDigits;
         public string LastDigits;
-        public string IBAN;
+        public string IBAN { get { return FirstSixDigits + LastDigits; } }
 
         private string _accountNumber;
         public string AccountNumber 
@@ -20,14 +19,14 @@ namespace Visma.Types.Models
             set {
                 if (value.Replace("-", "").All(char.IsDigit) && value.Length > 6 && value.Length < 14)
                 {
-                    _accountNumber = value;
-                    FirstSixDigits = value.Substring(0, 6);
-
                     if (string.IsNullOrEmpty(value.Substring(0, 1)))
                         Bank = BankCode(value.Substring(0, 1));
                     else if (string.IsNullOrEmpty(value.Substring(0, 1)))
                         Bank = BankCode(value.Substring(0, 2));
-                    else throw new Exception("account number is not correct");
+                    else throw new Exception("account number is incorrect");
+
+                    _accountNumber = value;
+                    FirstSixDigits = value.Substring(0, 6);
 
                     var temp = value.Substring(value.LastIndexOf('-') + 1);
                     string Abanks = temp.PadLeft(8, '0');
@@ -46,13 +45,13 @@ namespace Visma.Types.Models
                         case "cooperative banks(Op), OKO Bank and Okopankki": LastDigits = Bbanks; break;
                         case "Ålandsbanken ÅAB)": LastDigits = Abanks; break;
                         case "Sampo Bank(Sampo)": LastDigits = Bbanks; break;
+                        default: throw new Exception("account number is incorrect");
                     }
                   
                     if (LuhnCheck(IBAN))                                
-                        IBAN = FirstSixDigits + LastDigits;   
-                    else throw new Exception("account number is not correct");
+                        throw new Exception("luhn check failed");
                 }        
-                else throw new Exception("account number is not correct");
+                else throw new Exception("account number is incorrect");
             }
         }
 

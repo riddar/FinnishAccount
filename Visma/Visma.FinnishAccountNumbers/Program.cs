@@ -1,6 +1,5 @@
 ﻿using System;
 using Visma.Types.Models;
-using System.Linq;
 
 namespace Visma.FinnishAccountNumbers
 {
@@ -12,13 +11,8 @@ namespace Visma.FinnishAccountNumbers
             do
             {
                 account = new Account();
-                try
-                {    
-                    Console.Write("account number: ");
-                    account.AccountNumber = Console.ReadLine();
-                }
-                catch(Exception e) { Console.WriteLine(e); }
-
+                Console.Write("account number: ");
+                account.AccountNumber = Console.ReadLine();
 
             } while (string.IsNullOrEmpty(account.AccountNumber));
 
